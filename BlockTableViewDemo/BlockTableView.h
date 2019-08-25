@@ -42,6 +42,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSInteger)numberOfRowsInSection:(NSInteger)section;
 - (void)reloadData;
 
+- (void)registerNib:(nullable UINib *)nib forCellReuseIdentifier:(NSString *)identifier;
+- (void)registerClass:(nullable Class)cellClass forCellReuseIdentifier:(NSString *)identifier;
+- (void)registerNib:(nullable UINib *)nib forHeaderFooterViewReuseIdentifier:(NSString *)identifier;
+- (void)registerClass:(nullable Class)aClass forHeaderFooterViewReuseIdentifier:(NSString *)identifier;
 
 @end
 

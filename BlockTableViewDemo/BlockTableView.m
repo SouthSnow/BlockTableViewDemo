@@ -49,6 +49,7 @@
 
 - (void)setupSubviews {
     [self addSubview:self.shadowView];
+    [self addSubview:self.baseView];
     [self.baseView addSubview:self.tableView];
     self.shadowView.backgroundColor = [UIColor whiteColor];
     [self setupShadowStyleForView:self.shadowView];
@@ -61,7 +62,6 @@
         _baseView = [[UIView alloc] initWithFrame:self.bounds];
         _baseView.layer.cornerRadius = 10;
         _baseView.layer.masksToBounds = YES;
-        [self addSubview:_baseView];
     }
     return _baseView;
 }
@@ -78,9 +78,23 @@
     if (_tableView == nil) {
         _tableView = [[UITableView alloc] initWithFrame:self.baseView.bounds style:self.tableViewStyle];
         [self setupTableView];
-        [self.baseView addSubview:_tableView];
     }
     return _tableView;
+}
+
+- (void)setSeparatorInset:(UIEdgeInsets)separatorInset {
+    self.tableView.separatorInset = separatorInset;
+    _separatorInset = separatorInset;
+}
+
+- (void)setDataSource:(id<BlockTableViewDataSource>)dataSource {
+    _dataSource = dataSource;
+    self.tableView.dataSource = dataSource;
+}
+
+- (void)setDelegate:(id<BlockTableViewDelegate>)delegate {
+    _delegate = delegate;
+    self.tableView.delegate = delegate;
 }
 
 #pragma mark private methods
@@ -89,7 +103,7 @@
     _tableView.delegate = self.delegate;
     _tableView.dataSource = self.dataSource;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    _tableView.separatorInset = self.separatorInset;// UIEdgeInsetsMake(0, 23, 0, 23);
+    _tableView.separatorInset =  UIEdgeInsetsMake(0, 23, 0, 23);
     _tableView.rowHeight = self.rowHeight;
     _tableView.sectionHeaderHeight = self.sectionHeaderHeight;
     _tableView.sectionFooterHeight = self.sectionFooterHeight;
@@ -97,7 +111,9 @@
     _tableView.estimatedSectionHeaderHeight = self.estimatedSectionHeaderHeight;
     _tableView.estimatedSectionFooterHeight = self.estimatedSectionFooterHeight;
     _tableView.backgroundView = self.backgroundView;
+    _tableView.scrollEnabled = NO;
 }
+
 
 - (void)setupShadowStyleForView:(UIView*)view {
     view.layer.cornerRadius = 10;
@@ -119,6 +135,20 @@
 
 - (void)reloadData {
     [self.tableView reloadData];
+}
+
+- (void)registerNib:(nullable UINib *)nib forCellReuseIdentifier:(NSString *)identifier  {
+    [self.tableView  registerNib: nib forCellReuseIdentifier:identifier];
+}
+- (void)registerClass:(nullable Class)cellClass forCellReuseIdentifier:(NSString *)identifier  {
+    [self.tableView  registerClass: cellClass forCellReuseIdentifier:identifier];
+}
+
+- (void)registerNib:(nullable UINib *)nib forHeaderFooterViewReuseIdentifier:(NSString *)identifier {
+    [self.tableView registerNib:nib forHeaderFooterViewReuseIdentifier:identifier];
+}
+- (void)registerClass:(nullable Class)aClass forHeaderFooterViewReuseIdentifier:(NSString *)identifier {
+    [self.tableView registerClass: aClass forHeaderFooterViewReuseIdentifier:identifier];
 }
 
 
